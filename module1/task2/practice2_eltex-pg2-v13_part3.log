@@ -203,4 +203,88 @@ remote: Compressing objects: 100% (15/15), done.
 remote: Total 18 (delta 0), reused 18 (delta 0), pack-reused 0 (from 0)
 Receiving objects: 100% (18/18), 640.65 KiB | 1.74 MiB/s, done.
 root@eltex-practice2-pg2-v13:~/eltex-practice_clone# cd ~/eltex-practice
+root@eltex-practice2-pg2-v13:~/eltex-practice/module1/task2# vi practice2_eltex-                                                                                                             pg2-v13_part1.log
+root@eltex-practice2-pg2-v13:~/eltex-practice/module1/task2# cd ~/eltex-practice
+root@eltex-practice2-pg2-v13:~/eltex-practice# git add .
+root@eltex-practice2-pg2-v13:~/eltex-practice# git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   module1/task2/practice2_eltex-pg2-v13_part3.log
+
+root@eltex-practice2-pg2-v13:~/eltex-practice# git commit -m "Выполнение пункта 3.11 Практики 2"
+[main 3baca3a] Выполнение пункта 3.11 Практики 2
+ 1 file changed, 9 insertions(+)
+root@eltex-practice2-pg2-v13:~/eltex-practice# git push
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (5/5), done.
+Writing objects: 100% (5/5), 718 bytes | 718.00 KiB/s, done.
+Total 5 (delta 2), reused 0 (delta 0), pack-reused 0
+remote: Resolving deltas: 100% (2/2), completed with 2 local objects.
+To https://github.com/alexnayman/eltex-practice.git
+   28bdcff..3baca3a  main -> main
+root@eltex-practice2-pg2-v13:~/eltex-practice# cd ~/eltex-practice_clone
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone# git fetch
+remote: Enumerating objects: 9, done.
+remote: Counting objects: 100% (9/9), done.
+remote: Compressing objects: 100% (3/3), done.
+remote: Total 5 (delta 2), reused 5 (delta 2), pack-reused 0 (from 0)
+Unpacking objects: 100% (5/5), 698 bytes | 698.00 KiB/s, done.
+From https://github.com/alexnayman/eltex-practice
+   28bdcff..3baca3a  main       -> origin/main
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone# git log origin/main
+commit 3baca3a6684ee9b7ddd44dc0b1ddbb05b644e2f4 (origin/main, origin/HEAD)
+Author: alexnayman <fron.alex@yandex.ru>
+Date:   Thu Mar 19 18:24:36 2026 +0000
+
+    Выполнение пункта 3.11 Практики 2
+
+commit 28bdcffcf0ec72f66677cd400000aa73b03a4458 (HEAD -> main)
+Author: alexnayman <fron.alex@yandex.ru>
+Date:   Thu Mar 19 13:32:00 2026 +0000
+
+    Добавление файлов по Модулю 1 Практике 2
+
+commit 6542762781dcd0e96b6ef0ab3aba6eeef4ffd2ea
+Author: alexnayman <fron.alex@yandex.ru>
+Date:   Thu Mar 19 13:16:43 2026 +0000
+
+    Добавление файлов по Практике 1
+
+commit e9b1caec93caeb9cea4244bdbb62ca66ef7d20c0
+Author: alexnayman <fron.alex@yandex.ru>
+Date:   Thu Mar 19 11:58:07 2026 +0000
+
+    first commit
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone#
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone# git diff main /origin/main
+fatal: Invalid path '/origin': No such file or directory
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone# git diff main origin/main
+diff --git a/module1/task2/practice2_eltex-pg2-v13_part3.log b/module1/task2/pra                                                                                                             ctice2_eltex-pg2-v13_part3.log
+index 834a7c8..6d375c3 100644
+--- a/module1/task2/practice2_eltex-pg2-v13_part3.log
++++ b/module1/task2/practice2_eltex-pg2-v13_part3.log
+@@ -194,4 +194,13 @@ Writing objects: 100% (8/8), 593.64 KiB | 37.10 MiB/s, done                                                                                                             .
+ Total 8 (delta 0), reused 0 (delta 0), pack-reused 0
+ To https://github.com/alexnayman/eltex-practice.git
+    e9b1cae..6542762  main -> main
++root@eltex-practice2-pg2-v13:~/eltex-practice# mkdir ~/eltex-practice_clone &&                                                                                                              cd ~/eltex-practice_clone
++root@eltex-practice2-pg2-v13:~/eltex-practice_clone# git clone https://github.c                                                                                                             om/alexnayman/eltex-practice.git .
++Cloning into '.'...
++remote: Enumerating objects: 18, done.
++remote: Counting objects: 100% (18/18), done.
++remote: Compressing objects: 100% (15/15), done.
++remote: Total 18 (delta 0), reused 18 (delta 0), pack-reused 0 (from 0)
++Receiving objects: 100% (18/18), 640.65 KiB | 1.74 MiB/s, done.
++root@eltex-practice2-pg2-v13:~/eltex-practice_clone# cd ~/eltex-practice
+
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone# git merge
+Updating 28bdcff..3baca3a
+Fast-forward
+ module1/task2/practice2_eltex-pg2-v13_part3.log | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
