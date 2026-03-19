@@ -1,0 +1,197 @@
+root@eltex-practice2-pg2-v13:~# git config --global user.name "alexnayman"
+root@eltex-practice2-pg2-v13:~# git config --global user.email "fron.alex@yandex.ru"
+root@eltex-practice2-pg2-v13:~# git config --global init.defaultBranch main
+root@eltex-practice2-pg2-v13:~# apt update
+Hit:1 http://ru.archive.ubuntu.com/ubuntu noble InRelease
+Get:2 http://ru.archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+Get:3 http://ru.archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+Get:4 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+Get:5 http://ru.archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1,839 kB]
+Get:6 http://ru.archive.ubuntu.com/ubuntu noble-updates/main Translation-en [338 kB]
+Get:7 http://ru.archive.ubuntu.com/ubuntu noble-updates/main amd64 Components [177 kB]
+Get:8 http://ru.archive.ubuntu.com/ubuntu noble-updates/main amd64 c-n-f Metadata [16.7 kB]
+Get:9 http://ru.archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Components [212 B]
+Get:10 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [1,567 kB]
+Get:11 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe Translation-en [319 kB]
+Get:12 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 Components [386 kB]
+Get:13 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 c-n-f Metadata [33.0 kB]
+Get:14 http://ru.archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Components [940 B]
+Get:15 http://ru.archive.ubuntu.com/ubuntu noble-backports/main amd64 Components [7,368 B]
+Get:16 http://ru.archive.ubuntu.com/ubuntu noble-backports/restricted amd64 Components [216 B]
+Get:17 http://ru.archive.ubuntu.com/ubuntu noble-backports/universe amd64 Components [13.2 kB]
+Get:18 http://ru.archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Components [212 B]
+Get:19 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1,542 kB]
+Get:20 http://security.ubuntu.com/ubuntu noble-security/main Translation-en [248 kB]
+Get:21 http://security.ubuntu.com/ubuntu noble-security/main amd64 Components [21.5 kB]
+Get:22 http://security.ubuntu.com/ubuntu noble-security/main amd64 c-n-f Metadata [10.7 kB]
+Get:23 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Components [212 B]
+Get:24 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [977 kB]
+Get:25 http://security.ubuntu.com/ubuntu noble-security/universe Translation-en [219 kB]
+Get:26 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Components [74.1 kB]
+Get:27 http://security.ubuntu.com/ubuntu noble-security/universe amd64 c-n-f Metadata [20.8 kB]
+Get:28 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Components [212 B]
+Fetched 8,190 kB in 2s (3,607 kB/s)
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+87 packages can be upgraded. Run 'apt list --upgradable' to see them.
+root@eltex-practice2-pg2-v13:~# apt install git gh
+Reading package lists... Done
+Building dependency tree... Done
+Reading state information... Done
+git is already the newest version (1:2.43.0-1ubuntu7.3).
+git set to manually installed.
+The following NEW packages will be installed:
+  gh
+0 upgraded, 1 newly installed, 0 to remove and 87 not upgraded.
+Need to get 8,836 kB of archives.
+After this operation, 45.4 MB of additional disk space will be used.
+Do you want to continue? [Y/n] y
+Get:1 http://ru.archive.ubuntu.com/ubuntu noble-updates/universe amd64 gh amd64 2.45.0-1ubuntu0.3 [8,836 kB]
+Fetched 8,836 kB in 1s (10.0 MB/s)
+Selecting previously unselected package gh.
+(Reading database ... 125296 files and directories currently installed.)
+Preparing to unpack .../gh_2.45.0-1ubuntu0.3_amd64.deb ...
+Unpacking gh (2.45.0-1ubuntu0.3) ...
+Setting up gh (2.45.0-1ubuntu0.3) ...
+Processing triggers for man-db (2.12.0-4build2) ...
+Scanning processes...
+Scanning candidates...
+Scanning linux images...
+
+Pending kernel upgrade!
+Running kernel version:
+  6.8.0-55-generic
+Diagnostics:
+  The currently running kernel version is not the expected kernel version 6.8.0-106-generic.
+
+Restarting the system to load the new kernel will not be handled automatically, so you should consider rebooting.
+
+Restarting services...
+
+Service restarts being deferred:
+ /etc/needrestart/restart.d/dbus.service
+ systemctl restart getty@tty1.service
+ systemctl restart systemd-logind.service
+ systemctl restart unattended-upgrades.service
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+root@eltex-practice2-pg2-v13:~# ssh-keygen -t ed25519 -f ~/.ssh/alexnayman
+Generating public/private ed25519 key pair.
+Enter passphrase (empty for no passphrase):
+Enter same passphrase again:
+Your identification has been saved in /root/.ssh/alexnayman
+Your public key has been saved in /root/.ssh/alexnayman.pub
+The key fingerprint is:
+SHA256:v9uq2ESime9BNj+fFfJ3HxYEV0bOUpICCQELvOuIyFc root@eltex-practice2-pg2-v13
+The key's randomart image is:
++--[ED25519 256]--+
+|   .. ..oo.o ..+*|
+|    .. .  . . +* |
+|     ..      ...o|
+|    .         .. |
+|     .= S . .  . |
+|    .E = . o .  .|
+|o. o= . + . o .o.|
+|o..... = o = ...o|
+|  .  .+ o.*o.   .|
++----[SHA256]-----+
+root@eltex-practice2-pg2-v13:~# gh auth login
+? What account do you want to log into? GitHub.com
+? What is your preferred protocol for Git operations on this host? SSH
+? Upload your SSH public key to your GitHub account? /root/.ssh/alexnayman.pub
+? Title for your SSH key: eltex-practice2-pg2-v13
+? How would you like to authenticate GitHub CLI? Login with a web browser
+
+! First copy your one-time code: 6A09-F98A
+Press Enter to open github.com in your browser...
+! Failed opening a web browser at https://github.com/login/device
+  exec: "xdg-open,x-www-browser,www-browser,wslview": executable file not found in $PATH
+  Please try entering the URL in your browser manually
+✓ Authentication complete.
+- gh config set -h github.com git_protocol ssh
+✓ Configured git protocol
+! Authentication credentials saved in plain text
+✓ Uploaded the SSH key to your GitHub account: /root/.ssh/alexnayman.pub
+✓ Logged in as alexnayman
+root@eltex-practice2-pg2-v13:~# gh auth setup-git --hostname github.com
+root@eltex-practice2-pg2-v13:~# gh auth status
+github.com
+  ✓ Logged in to github.com account alexnayman (/root/.config/gh/hosts.yml)
+  - Active account: true
+  - Git operations protocol: ssh
+  - Token: gho_************************************
+  - Token scopes: 'admin:public_key', 'gist', 'read:org', 'repo'
+root@eltex-practice2-pg2-v13:~# gh repo create --public eltex-practice
+✓ Created repository alexnayman/eltex-practice on GitHub
+  https://github.com/alexnayman/eltex-practice
+root@eltex-practice2-pg2-v13:~# mkdir ~/eltex-practice && cd ~/eltex-practice
+root@eltex-practice2-pg2-v13:~/eltex-practice# echo "# Практики ELTEX 2026" >> README.md
+root@eltex-practice2-pg2-v13:~/eltex-practice# git init
+Initialized empty Git repository in /root/eltex-practice/.git/
+root@eltex-practice2-pg2-v13:~/eltex-practice# git add README.md
+root@eltex-practice2-pg2-v13:~/eltex-practice# git commit -m "first commit"
+[main (root-commit) e9b1cae] first commit
+ 1 file changed, 1 insertion(+)
+ create mode 100644 README.md
+root@eltex-practice2-pg2-v13:~/eltex-practice# git branch -M main
+root@eltex-practice2-pg2-v13:~/eltex-practice# git remote add origin https://github.com/alexnayman/eltex-practice.git
+root@eltex-practice2-pg2-v13:~/eltex-practice# git status
+On branch main
+nothing to commit, working tree clean
+root@eltex-practice2-pg2-v13:~/eltex-practice# git push -u origin main
+Enumerating objects: 3, done.
+Counting objects: 100% (3/3), done.
+Writing objects: 100% (3/3), 243 bytes | 243.00 KiB/s, done.
+Total 3 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/alexnayman/eltex-practice.git
+ * [new branch]      main -> main
+branch 'main' set up to track 'origin/main'.
+root@eltex-practice2-pg2-v13:~/eltex-practice# mkdir -p module1/task1
+root@eltex-practice2-pg2-v13:~/eltex-practice# mkdir module1/task2
+root@eltex-practice2-pg2-v13:~/eltex-practice# mkdir module1/task3
+eltex-pg2-v13@eltex-2026-spring:~$ scp eltex-pg2-v13_part.log root@172.16.9.213:/root/eltex-practice/module1/task1/
+eltex-pg2-v13_part.log                                                                                                                                     100%  458     1.3MB/s   00:00
+eltex-pg2-v13@eltex-2026-spring:~$ ls
+2026-01  2026-03  2026-05  2026-07  2026-09  2026-11  D1                             eltex-pg2-v13_part3.log
+2026-02  2026-04  2026-06  2026-08  2026-10  2026-12  eltex-pg2-v13_part3_gt50M.log  eltex-pg2-v13_part.log
+eltex-pg2-v13@eltex-2026-spring:~$ scp eltex-pg2-v13_part3.log root@172.16.9.213:/root/eltex-practice/module1/task1/
+eltex-pg2-v13_part3.log                                                                                                                                    100%  403     1.1MB/s   00:00
+eltex-pg2-v13@eltex-2026-spring:~$ scp eltex-pg2-v13_part3_gt50M.log root@172.16.9.213:/root/eltex-practice/module1/task1/
+eltex-pg2-v13_part3_gt50M.log                                                                                                                              100%  598     1.7MB/s   00:00
+eltex-pg2-v13@eltex-2026-spring:~$ scp practice1.pdf root@172.16.9.213:/root/eltex-practice/module1/task1/
+practice1.pdf                                 100%  660KB 102.4MB/s   00:00
+root@eltex-practice2-pg2-v13:~# cd eltex-practice/
+root@eltex-practice2-pg2-v13:~/eltex-practice# git add .
+root@eltex-practice2-pg2-v13:~/eltex-practice# git status
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        new file:   module1/task1/eltex-pg2-v13_part.log
+        new file:   module1/task1/eltex-pg2-v13_part3.log
+        new file:   module1/task1/eltex-pg2-v13_part3_gt50M.log
+        new file:   module1/task1/practice1.pdf
+
+root@eltex-practice2-pg2-v13:~/eltex-practice# git commit -m "Добавление файлов                                                                                                              по Практике 1"
+[main 6542762] Добавление файлов по Практике 1
+ 4 files changed, 52 insertions(+)
+ create mode 100644 module1/task1/eltex-pg2-v13_part.log
+ create mode 100644 module1/task1/eltex-pg2-v13_part3.log
+ create mode 100644 module1/task1/eltex-pg2-v13_part3_gt50M.log
+ create mode 100644 module1/task1/practice1.pdf
+root@eltex-practice2-pg2-v13:~/eltex-practice# git push
+Enumerating objects: 9, done.
+Counting objects: 100% (9/9), done.
+Delta compression using up to 2 threads
+Compressing objects: 100% (7/7), done.
+Writing objects: 100% (8/8), 593.64 KiB | 37.10 MiB/s, done.
+Total 8 (delta 0), reused 0 (delta 0), pack-reused 0
+To https://github.com/alexnayman/eltex-practice.git
+   e9b1cae..6542762  main -> main
+
