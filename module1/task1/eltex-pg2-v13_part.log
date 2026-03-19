@@ -1,0 +1,23 @@
+screen -S `whoami`_part2
+ls +tab+tab
+$HIST +tab+tab
+Echo $HISTFILESIZE
+ls -a | grep `^\.`
+export HISTTIMEFORMAT=”%F”
+date
+history | tail -5
+tail -5 $HISTFILE
+export PROMPT_COMMAND=”history -a”
+date
+history | tail -5
+tail -5 $HISTFILE
+DATE=$(date +%d.%m.%Y)
+echo $DATE
+TIME=$(date +%H:%M)
+echo $TIME
+DATE_TIME=”$DATE $TIME”
+echo $DATE_TIME
+ls /bin /sbin | grep ‘[0-9]’
+export PS1=”\u@\h-$(date +%H:%M)>”
+bash
+dir -p ~/$(date +%Y)-{01..12}
