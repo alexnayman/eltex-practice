@@ -194,4 +194,13 @@ Writing objects: 100% (8/8), 593.64 KiB | 37.10 MiB/s, done.
 Total 8 (delta 0), reused 0 (delta 0), pack-reused 0
 To https://github.com/alexnayman/eltex-practice.git
    e9b1cae..6542762  main -> main
+root@eltex-practice2-pg2-v13:~/eltex-practice# mkdir ~/eltex-practice_clone && cd ~/eltex-practice_clone
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone# git clone https://github.com/alexnayman/eltex-practice.git .
+Cloning into '.'...
+remote: Enumerating objects: 18, done.
+remote: Counting objects: 100% (18/18), done.
+remote: Compressing objects: 100% (15/15), done.
+remote: Total 18 (delta 0), reused 18 (delta 0), pack-reused 0 (from 0)
+Receiving objects: 100% (18/18), 640.65 KiB | 1.74 MiB/s, done.
+root@eltex-practice2-pg2-v13:~/eltex-practice_clone# cd ~/eltex-practice
 
