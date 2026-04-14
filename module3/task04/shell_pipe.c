@@ -8,44 +8,43 @@
 #define MAX_CMD 1024
 #define MAX_ARGS 64
 
-void execute_command(char** args, int input_fd, int output_fd) {
+void execute_proc(char** args, int in_fd, int out_fd) {
     pid_t pid = fork();
     if (pid == 0) {
-        if (input_fd != STDIN_FILENO) {
-            dup2(input_fd, STDIN_FILENO);
-            close(input_fd);
+        if (in_fd != STDIN_FILENO) {
+            dup2(in_fd, STDIN_FILENO);
+            close(in_fd);
         }
-        if (output_fd != STDOUT_FILENO) {
-            dup2(output_fd, STDOUT_FILENO);
-            close(output_fd);
+        if (out_fd != STDOUT_FILENO) {
+            dup2(out_fd, STDOUT_FILENO);
+            close(out_fd);
         }
-
         execvp(args[0], args);
         perror("execvp");
         exit(EXIT_FAILURE);
     }
 }
 
-void parse_and_run(char* cmd_line) {
-    char* commands[MAX_ARGS];
-    int num_commands = 0;
-
-    char* token = strtok(cmd_line, "|");
-    while (token && num_commands < MAX_ARGS) {
-        commands[num_commands++] = token;
+void process_line(char* line) {
+    char* cmds[MAX_ARGS];
+    int n_cmds = 0;
+    char* token = strtok(line, "|");
+    
+    while (token && n_cmds < MAX_ARGS) {
+        cmds[n_cmds++] = token;
         token = strtok(NULL, "|");
     }
 
+    int in_fd = STDIN_FILENO;
     int pipe_fds[2];
-    int input_fd = STDIN_FILENO;
 
-    for (int i = 0; i < num_commands; i++) {
+    for (int i = 0; i < n_cmds; i++) {
         char* args[MAX_ARGS];
         int nargs = 0;
         char* infile = NULL;
         char* outfile = NULL;
 
-        char* arg = strtok(commands[i], " \t");
+        char* arg = strtok(cmds[i], " \t");
         while (arg) {
             if (strcmp(arg, "<") == 0) {
                 infile = strtok(NULL, " \t");
@@ -67,27 +66,30 @@ void parse_and_run(char* cmd_line) {
         }
 
         if (infile) {
-            input_fd = open(infile, O_RDONLY);
-            if (input_fd < 0) {
+            in_fd = open(infile, O_RDONLY);
+            if (in_fd < 0) {
                 perror("open input");
                 return;
             }
         }
 
-        int current_output = STDOUT_FILENO;
+        int out_fd = STDOUT_FILENO;
         if (outfile) {
-            current_output = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-        } else if (i < num_commands - 1) {
-            pipe(pipe_fds);
-            current_output = pipe_fds[1];
+            out_fd = open(outfile, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+        } else if (i < n_cmds - 1) {
+            if (pipe(pipe_fds) < 0) {
+                perror("pipe");
+                return;
+            }
+            out_fd = pipe_fds[1];
         }
 
-        execute_command(args, input_fd, current_output);
+        execute_proc(args, in_fd, out_fd);
 
-        if (input_fd != STDIN_FILENO) close(input_fd);
-        if (current_output != STDOUT_FILENO) close(current_output);
+        if (in_fd != STDIN_FILENO) close(in_fd);
+        if (out_fd != STDOUT_FILENO) close(out_fd);
 
-        input_fd = pipe_fds[0];
+        in_fd = pipe_fds[0];
     }
 
     while (wait(NULL) > 0);
@@ -95,16 +97,17 @@ void parse_and_run(char* cmd_line) {
 
 int main(void) {
     char line[MAX_CMD];
-    printf("=== Pipeline Shell ===\n");
 
     while (1) {
         printf("mysh> ");
         fflush(stdout);
+
         if (!fgets(line, sizeof(line), stdin)) break;
-        line[strcspn(line, "\r\n")] = '\0';
+        line[strcspn(line, "\n")] = '\0';
         if (line[0] == '\0') continue;
 
-        parse_and_run(line);
+        process_line(line);
     }
+
     return 0;
 }
