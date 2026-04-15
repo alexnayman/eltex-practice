@@ -62,7 +62,7 @@ int main(int argc, char *argv[]) {
             m.sender = id;
             msgsnd(qid, &m, sizeof(m) - sizeof(long), 0);
 
-            if (strcmp(m.text, "shutdown") == 0) {
+            if (strcmp(m.text, "end") == 0) {
                 kill(p, SIGKILL);
                 exit(0);
             }

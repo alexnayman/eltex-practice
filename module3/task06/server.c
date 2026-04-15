@@ -50,7 +50,7 @@ int main() {
             printf("[NEW CONNECTION] Client %d joined. Total clients: %d\n", m.sender, n);
         }
 
-        if (strcmp(m.text, "shutdown") == 0) {
+        if (strcmp(m.text, "end") == 0) {
             printf("[SHUTDOWN] Client %d left the chat.\n", m.sender);
             if (idx != -1) {
                 for (int i = idx; i < n - 1; i++) cl[i] = cl[i+1];
