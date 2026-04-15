@@ -1,15 +1,15 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11
+CFLAGS = -Wall -Wextra -std=c99
+TARGETS = server client
 
-all: server client
+all: $(TARGETS)
 
 server: server.c
-	$(CC) $(CFLAGS) -o server server.c
+	$(CC) $(CFLAGS) server.c -o server
 
 client: client.c
-	$(CC) $(CFLAGS) -o client client.c
+	$(CC) $(CFLAGS) client.c -o client
 
 clean:
-	$(RM) server client *.o
-
-.PHONY: all clean
+	rm -f $(TARGETS)
+	ipcrm -Q 1234 2>/dev/null || true

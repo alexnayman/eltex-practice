@@ -1,74 +1,72 @@
-#define _GNU_SOURCE
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <sys/ipc.h>
-#include <sys/msg.h>
-#include <sys/types.h>
 #include <unistd.h>
 #include <signal.h>
+#include <sys/ipc.h>
+#include <sys/msg.h>
 
-#define MSG_KEY 0x1234
+#define Q_KEY 1234
+#define SERVER_TYPE 10
 #define MAX_TEXT 256
 
-typedef struct {
+struct msg_buf {
     long mtype;
-    int sender_id;
+    int sender;
     char text[MAX_TEXT];
-} Message;
+};
 
-int main(int argc, char* argv[]) {
+int main(int argc, char *argv[]) {
     if (argc < 2) {
-        printf("Usage: client <client_id>\n");
+        printf("Usage: %s <client_id>\n", argv[0]);
         return 1;
     }
 
-    int my_id = atoi(argv[1]);
-    long my_type = 20 + my_id;
-
-    int msqid = msgget(MSG_KEY, 0666);
-    if (msqid < 0) {
-        perror("msgget");
+    int id = atoi(argv[1]);
+    int qid = msgget(Q_KEY, 0666);
+    if (qid == -1) {
+        perror("msgget (server might not be running)");
         return 1;
     }
 
-    Message srv;
-    srv.mtype = 10;
-    srv.sender_id = my_id;
-    snprintf(srv.text, MAX_TEXT, "connect");
-    msgsnd(msqid, &srv, sizeof(srv) - sizeof(long), 0);
+    struct msg_buf m;
+    pid_t p = fork();
 
-    pid_t pid = fork();
+    if (p < 0) {
+        perror("fork");
+        return 1;
+    }
 
-    if (pid == 0) {
-        Message incoming;
+    if (p == 0) {
         while (1) {
-            if (msgrcv(msqid, &incoming, sizeof(incoming) - sizeof(long), my_type, 0) > 0) {
-                printf("\n[Client %d]: %s\nYou> ", incoming.sender_id, incoming.text);
+            if (msgrcv(qid, &m, sizeof(m) - sizeof(long), id, 0) > 0) {
+                printf("\n[%d]: %s\n> ", m.sender, m.text);
                 fflush(stdout);
             }
         }
     } else {
-        char buf[MAX_TEXT];
-        Message out;
-        out.mtype = 10;
-        out.sender_id = my_id;
+        
+        m.mtype = SERVER_TYPE;
+        m.sender = id;
+        memset(m.text, 0, MAX_TEXT);
+        msgsnd(qid, &m, sizeof(m) - sizeof(long), 0);
 
         while (1) {
-            printf("You> ");
-            fflush(stdout);
-            if (!fgets(buf, MAX_TEXT, stdin)) break;
-            buf[strcspn(buf, "\n")] = '\0';
-            if (strlen(buf) == 0) continue;
+            printf("> ");
+            if (!fgets(m.text, MAX_TEXT, stdin)) break;
+            m.text[strcspn(m.text, "\n")] = 0;
+            
+            if (strlen(m.text) == 0) continue;
 
-            strncpy(out.text, buf, MAX_TEXT - 1);
-            out.text[MAX_TEXT - 1] = '\0';
-            msgsnd(msqid, &out, sizeof(out) - sizeof(long), 0);
+            m.mtype = SERVER_TYPE;
+            m.sender = id;
+            msgsnd(qid, &m, sizeof(m) - sizeof(long), 0);
 
-            if (strcmp(buf, "shutdown") == 0) break;
+            if (strcmp(m.text, "shutdown") == 0) {
+                kill(p, SIGKILL);
+                exit(0);
+            }
         }
-
-        kill(pid, SIGTERM);
     }
 
     return 0;

@@ -5,28 +5,20 @@
 #include <unistd.h>
 #include <signal.h>
 
-FILE* f;
-volatile sig_atomic_t sc = 0;
+volatile sig_atomic_t last_signal = 0;
+volatile sig_atomic_t sigint_count = 0;
 
 void h(int s) {
-    if (s == SIGINT || s == SIGQUIT) {
-        fprintf(f, "sig %d\n", s);
-        fflush(f);
-    }
-    
+    last_signal = s;
     if (s == SIGINT) {
-        sc++;
-        if (sc == 3) {
-            fclose(f);
-            exit(0);
-        }
+        sigint_count++;
     }
 }
 
 int main(void) {
     int c = 1;
-    
-    f = fopen("out.txt", "w");
+
+    FILE* f = fopen("out.txt", "w");
     if (!f) return 1;
 
     struct sigaction sa;
@@ -38,10 +30,25 @@ int main(void) {
     sigaction(SIGQUIT, &sa, NULL);
 
     while (1) {
+        if (last_signal != 0) {
+            if (last_signal == SIGINT || last_signal == SIGQUIT) {
+                fprintf(f, "sig %d\n", (int)last_signal);
+                fflush(f);
+            }
+
+            if (sigint_count >= 3) {
+                break;
+            }
+
+            last_signal = 0;
+        }
+
         fprintf(f, "%d\n", c++);
         fflush(f);
+
         sleep(1);
     }
 
+    fclose(f);
     return 0;
 }
