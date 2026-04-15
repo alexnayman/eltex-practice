@@ -1,16 +1,14 @@
 CC = gcc
-CFLAGS = -Wall -Wextra -std=c11
-LDFLAGS = -lrt
+CFLAGS = -Wall -Wextra -std=c99 -D_POSIX_C_SOURCE=200809L
+LIBS = -lrt
 
 all: chat_a chat_b
 
 chat_a: chat_a.c
-	$(CC) $(CFLAGS) -o chat_a chat_a.c $(LDFLAGS)
+	$(CC) $(CFLAGS) chat_a.c -o chat_a $(LIBS)
 
 chat_b: chat_b.c
-	$(CC) $(CFLAGS) -o chat_b chat_b.c $(LDFLAGS)
+	$(CC) $(CFLAGS) chat_b.c -o chat_b $(LIBS)
 
 clean:
-	$(RM) chat_a chat_b *.o
-
-.PHONY: all clean
+	rm -f chat_a chat_b

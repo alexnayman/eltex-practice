@@ -1,102 +1,59 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-#include <sys/types.h>
 #include <sys/ipc.h>
 #include <sys/sem.h>
-#include <fcntl.h>
+#include <sys/types.h>
 
-union sem_u {
-    int val;
-    struct semid_ds *buf;
-    unsigned short *array;
-};
-
-int get_sem(const char *name) {
-    int fd = open(name, O_CREAT | O_RDWR, 0666);
-    if (fd >= 0) close(fd);
-
-    key_t k = ftok(name, 1);
-    int s = semget(k, 1, IPC_CREAT | IPC_EXCL | 0666);
-    
-    if (s >= 0) {
-        union sem_u u;
-        u.val = 1;
-        semctl(s, 0, SETVAL, u);
-    } else {
-        s = semget(k, 1, 0666);
-    }
-    
-    return s;
-}
-
-void lock(int s) {
-    struct sembuf b = {0, -1, 0};
-    semop(s, &b, 1);
-}
-
-void unlock(int s) {
-    struct sembuf b = {0, 1, 0};
-    semop(s, &b, 1);
-}
-
-int main(int argc, char **argv) {
+int main(int argc, char *argv[]) {
     if (argc < 2) return 1;
-    
-    char *name = argv[1];
-    int s = get_sem(name);
 
-    char tname[256];
-    snprintf(tname, sizeof(tname), "%s.tmp.%d", name, getpid());
+    char *fname = argv[1];
+    key_t key = ftok(fname, 1);
+    int semid = semget(key, 1, 0666);
+    if (semid == -1) return 1;
+
+    struct sembuf lock = {0, -1, SEM_UNDO};
+    struct sembuf unlock = {0, 1, SEM_UNDO};
+
+    char line[1024];
 
     while (1) {
-        char buf[4096];
-        int ok = 0;
+        semop(semid, &lock, 1);
 
-        lock(s);
-        FILE *f = fopen(name, "r");
+        FILE *f = fopen(fname, "r+");
         if (f) {
-            if (fgets(buf, sizeof(buf), f)) {
-                ok = 1;
-                FILE *t = fopen(tname, "w");
-                if (t) {
-                    char tb[4096];
-                    while (fgets(tb, sizeof(tb), f)) {
-                        fputs(tb, t);
+            int has_data = 0;
+            while (fgets(line, sizeof(line), f)) {
+                has_data = 1;
+                int min, max, val, n, offset = 0;
+                int first = 1;
+
+                char *ptr = line;
+                while (sscanf(ptr, "%d%n", &val, &n) == 1) {
+                    if (first) {
+                        min = max = val;
+                        first = 0;
+                    } else {
+                        if (val < min) min = val;
+                        if (val > max) max = val;
                     }
-                    fclose(t);
-                    rename(tname, name);
+                    ptr += n;
                 }
+                if (!first) {
+                    printf("PID %d | File: %s | Max: %d, Min: %d\n", getpid(), fname, max, min);
+                }
+            }
+
+            if (has_data) {
+                freopen(fname, "w", f);
             }
             fclose(f);
         }
-        unlock(s);
 
-        if (ok) {
-            int min = -1, max = -1, first = 1;
-            char *p = strtok(buf, " \n");
-            
-            while (p) {
-                int v = atoi(p);
-                if (first) {
-                    min = v;
-                    max = v;
-                    first = 0;
-                } else {
-                    if (v < min) min = v;
-                    if (v > max) max = v;
-                }
-                p = strtok(NULL, " \n");
-            }
-            
-            if (!first) {
-                printf("[%s] Min: %d | Max: %d\n", name, min, max);
-            }
-        } else {
-            sleep(1);
-        }
+        semop(semid, &unlock, 1);
+        sleep(2);
     }
-    
+
     return 0;
 }

@@ -1,13 +1,13 @@
-CC = gcc
-CFLAGS = -Wall -Wextra
-
 all: producer consumer
 
 producer: producer.c
-	$(CC) $(CFLAGS) producer.c -o producer
+	gcc producer.c -o producer
 
 consumer: consumer.c
-	$(CC) $(CFLAGS) consumer.c -o consumer
+	gcc consumer.c -o consumer
 
 clean:
-	rm -f producer consumer *.tmp.*
+	rm -f producer consumer
+
+clean_ipc:
+	ipcs -s | awk '/0x/ {print $$2}' | xargs -n1 ipcrm -s
